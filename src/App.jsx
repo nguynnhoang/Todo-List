@@ -70,6 +70,12 @@ function App() {
     }
   }
 
+  const onClearCompletedTodos = () => {
+    const completedTodos = originalTodos.filter(todo => !todo.completed)
+    setOriginalTodos(completedTodos)
+    setTodos(completedTodos)
+  }
+
   const renderTodos = todos.map((item, index) => {
     return (
       <div key={item.id} className='my-3'>
@@ -90,32 +96,36 @@ function App() {
 
       {/*********06/12/2022**********/}
       {
-        todos.length > 0
-        ? `${amountTodoUncompleted} ${amountTodoUncompleted > 1 ? 'items' : 'item'} left`
+        todos.length > 0 ? 
+        <div className="mt-4 d-flex align-items-center">
+          <div>{`${amountTodoUncompleted} ${amountTodoUncompleted  > 1 ? 'items' : 'item'} left`}</div>
+          <div className='mx-2'>
+            <ButtonGroup>
+            {[{
+              label: "All",
+              value: "all"
+            }, {
+              label: "Active",
+              value: "active"
+            }, {
+              label: "Completed",
+              value: "completed"
+            }].map(item => <Button 
+              key={item.value}
+              onClick={() => onFilter(item.value)}
+              outline
+              color='primary'
+              active={item.value === state}
+            >{item.label}
+            </Button>)
+            }
+            </ButtonGroup>
+            <Button color='link' onClick={onClearCompletedTodos}>Clear completed</Button>
+          </div>
+        </div>
         : null
       }
-      <div className='mt-4'>
-        <ButtonGroup>
-        {[{
-          label: "All",
-          value: "all"
-        }, {
-          label: "Active",
-          value: "active"
-        }, {
-          label: "Completed",
-          value: "completed"
-        }].map(item => <Button 
-            key={item.value}
-            onClick={() => onFilter(item.value)}
-            outline
-            color='primary'
-            active={item.value === state}
-            >{item.label}
-          </Button>)
-        }
-        </ButtonGroup>
-      </div>
+
    
       {/* <Header></Header>
       <InputTodo></InputTodo>
